@@ -1,0 +1,11 @@
+{
+  "name": "mines",
+  "displayName": "mines",
+  
+  "expo":{
+      "name": "Mines",
+      "platforms": ["ios", "android"],
+      "sdkVersion": "37.0.0"
+  }
+  
+}
