@@ -1,41 +1,76 @@
 import React from 'react';
-import Field from './src/components/Field';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import MineField from './src/components/MineField';
 import params from './src/params';
+import { StyleSheet,View,Text, Alert } from 'react-native';
+
+import { 
+  createMineBoard,
+  openField,
+  cloneBoard,
+  hadExplosion,
+  wonGame,
+  showMines,
+  invertFlag
+ } from './src/functions';
 
 export default class App  extends Comment {
+  constructor(props){
+    super(props)
+    this.state = this.createState()
+  }
+
+
+  minesAmount = () => {
+    const cols = params.getColumnsAmount()
+    const rows = params.getRowsAmount()
+    return Math.ceil(cols * rows * params.difficultLevel)
+  }
+
+  createState = () => {
+    const cols = params.getColumnsAmount()
+    const rows = params.getRowsAmount()
+    return {
+      board: createMineBoard(rows, cols, this.minesAmount()),
+      won: false,
+      lost: false
+    }
+  }
+  onOpenField = (row, column) => {
+    const board = cloneBoard(this.state.board)
+    openField(board,row,column)
+    const lost = hadExplosion(board)
+    const won = wonGame(board)
+    if(lost){
+      showMines(board)
+      Alert.alert('Perdeeeu', 'Que burrico!')
+    }
+    if(won){
+      Alert.alert('Parabéns!', 'Você Venceu!')
+    }
+    this.setState({board, lost, won})
+  }
+  onSelectField = (row, column) => {
+    const board = cloneBoard(this.state.board)
+    invertFlag(board, row, column)
+    const won = wonGame(board)
+
+    if(won){
+      Alert.alert('Parabéns!', 'Você Venceu!!!')
+    }
+    this.setState({board, won})
+  }
   render(){
     <View style={styles.container}>
       <Text styles={styles.body}>Iniciando Mines</Text>
       <Text style={styles.instructions}>Tamanho da grade: 
          {params.getColumnsAmount()}X{params.getRowsAmount()}</Text>
 
-  <Field />
-        <Field opened />
-        <Field opened nearMines={1} />
-        <Field opened nearMines={2} />
-        <Field opened nearMines={3} />
-        <Field opened nearMines={6} />
-        <Mine mined />
-        <Mine mined opened />
-        <Mine mined opened exploded />
-        <Flag flagged />
-        <Flag flagged opened />
+      <View style={styles.board}>
+        <MineField board={this.state.board}
+          onOpenField={this.onOpenField}
+          onSelectField={this.onSelectField}
+        />
+      </View>
     </View>
   }
 }
@@ -44,50 +79,13 @@ export default class App  extends Comment {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+  },
+  board: {
     alignItems: 'center',
-    backgroundColor: '#c0c0c0',
-
-  },
-  instructions:{
-
-  },
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+    backgroundColor:'#aaa',
+  }
+  
 });
 
 
