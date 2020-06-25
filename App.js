@@ -1,7 +1,7 @@
 import React from 'react';
 import MineField from './src/components/MineField';
 import params from './src/params';
-import { StyleSheet,View,Text, Alert } from 'react-native';
+import { StyleSheet,View, Alert } from 'react-native';
 import Header from './src/components/Header';
 import LevelSelection from './src/screens/LevelSelection';
 import { 
