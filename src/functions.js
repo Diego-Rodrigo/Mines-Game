@@ -1,6 +1,6 @@
 
 
-// Função que cria o tabuleiro
+
 const createBoard = (rows, columns) => {
     return Array(rows).fill(0).map((_, row) => {
         return Array(columns).fill(0).map((_, column) => {
@@ -16,7 +16,7 @@ const createBoard = (rows, columns) => {
         })
     })
 }
-// Função que espalha as Mines
+
 const spreedMines = (board, minesAmount) => {
     const rows = board.length
     const columns = board[0].length
@@ -42,14 +42,14 @@ const cloneBoard = board => {
     return board.map(rows => {
         return rows.map(field => {
             return {...field}
-        })
-    })
+        });
+    });
+};
 
-}
 const getNeighbors = (board, row, column) => {
     const neighbors = []
     const row = [row - 1, row, row + 1]
-    const column = [column -1, column, column + 1]
+    const column = [column - 1, column, column + 1]
     rows.forEach(r => {
         columns.forEach(c => {
             const different = r !== row || c !== column
@@ -60,9 +60,9 @@ const getNeighbors = (board, row, column) => {
             }
         })
         
-    });
+    })
     return neighbors
-}
+};
 
 const safeNeighborhood = (board, row, column) => {
     const safes = (result, neighbor) => result && !neighbor.mined
@@ -86,11 +86,15 @@ const openField = (board, row, column) =>{
 }
 
 const fields = board => [].concat(...board)
+
 const hadExplosion = board => fields(board)
     .filter(field => field.exploded).length > 0
+
 const pendding = fiel => (field.mined && !field.flagged)
     || (!field.mined && !field.opened)
+
 const wonGame = board => fields(board).filter(pendding).length === 0
+
 const showMines = board => fields(board).filter(field => field.mined)
     .forEach(field => field.opened = true)
 
@@ -98,6 +102,8 @@ const invertFlag =(board, row, column) =>{
     const fiels = board[row][column]
     field.flagged = !field.flagged
 }
+
+const flagsUsed = board => fields(board).filter(field => field.flagged).length
 
 export { 
     createMineBoard,
@@ -107,4 +113,5 @@ export {
     wonGame,
     showMines,
     invertFlag,
+    flagsUsed,
  }
