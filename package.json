@@ -13,7 +13,7 @@
     "expo": "^37.0.12",
     "expo-device": "~2.1.0",
     "react": "16.11.0",
-    "react-native": "0.61.4"
+    "react-native": "0.62.3"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",
